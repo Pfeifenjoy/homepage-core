@@ -1,0 +1,12 @@
+[include]
+./src/**/*.js
+
+[ignore]
+.*/build/.*
+
+[libs]
+flow-typed
+
+[options]
+module.use_strict=true
+suppress_type=$FlowIssue

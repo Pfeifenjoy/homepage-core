@@ -1,0 +1,8 @@
+{
+	"db": {
+		"type": "sqlite",
+		"environment": {
+			"path": ":memory:"
+		}
+	}
+}
