@@ -1,17 +1,18 @@
 {
   "name": "@arwed/homepage-core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "My Homepage Core Component",
   "main": "build/index.js",
   "scripts": {
-    "build": "npm run clean && babel src --out-dir build",
     "test": "npm run lint && npm run flow && npm run mocha",
     "mocha": "mocha --require babel-core/register --require babel-polyfill --slow 30 --throw-deprecation --use_strict",
     "mocha-watch": "npm run mocha -- --watch --watch-extensions js",
     "clean": "rm -rf build",
     "flow": "flow",
     "lint": "eslint src test",
-    "prepublishOnly": "npm run clean && npm run test && npm run build"
+    "prepack": "npm run clean && npm run test && npm run prepack:babel && npm run prepack:flow",
+    "prepack:babel": "babel src --out-dir build",
+    "prepack:flow": "flow-copy-source src build"
   },
   "author": "Arwed Mett",
   "license": "MIT",
@@ -27,6 +28,7 @@
     "eslint-plugin-mocha": "^5.0.0",
     "flow": "^0.2.3",
     "flow-bin": "^0.69.0",
+    "flow-copy-source": "^2.0.2",
     "flow-typed": "^2.4.0",
     "mocha": "^5.1.0",
     "sinon": "^4.5.0",
