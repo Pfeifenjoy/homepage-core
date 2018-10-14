@@ -1,6 +1,6 @@
 {
   "name": "@arwed/homepage-core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "My Homepage Core Component",
   "main": "build/index.js",
   "scripts": {
@@ -10,9 +10,9 @@
     "clean": "rm -rf build",
     "flow": "flow",
     "lint": "eslint src test",
-	"prepack": "npm run clean && npm run test && npm run prepack:babel && npm run prepack:flow",
-	"prepack:babel": "babel src --out-dir build",
-	"prepack:flow": "flow-copy-source src build"
+    "prepack": "npm run clean && npm run test && npm run prepack:babel && npm run prepack:flow",
+    "prepack:babel": "babel src --out-dir build",
+    "prepack:flow": "flow-copy-source src build"
   },
   "author": "Arwed Mett",
   "license": "MIT",
