@@ -23,18 +23,18 @@ export class PushoverNotifier implements Notifier {
 	}
 
 	async send(message: Message): Promise<void> {
-		await fetch("https://api.pushover.net/1/messages.json", {
+		return await fetch("https://api.pushover.net/1/messages.json", {
 			method: "POST",
 			cache: "no-cache",
 			headers: {
 				"Content-Type": "application/json; charset=utf-8"
 			},
-			body: {
+			body: JSON.stringify({
 				token: this.token,
 				user: this.user,
 				message: "From: " + message.name + ", " + message.email + "\n"
 					+ "Message: " + message.text
-			}
+			})
 		})
 	}
 }
