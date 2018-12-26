@@ -37,8 +37,9 @@ const assert_description = (description: Description) => {
 		"Ill formed description: Only Objects can have children.")
 	assert(implies(is_object(description))(description.children !== undefined),
 		"Object description must always have children.")
-	assert(description.type === typeof description.default || description.default === undefined,
-		`Wrong type of default value: ${ description.type } != ${ typeof description.default }`)
+	//TODO
+	//assert(description.type === typeof description.default || description.default === undefined,
+	//	`Wrong type of default value: ${ description.type } != ${ typeof description.default }`)
 	assert(implies(description.type === "array")(description.element_description !== undefined),
 		"You must provide an element type.")
 }
