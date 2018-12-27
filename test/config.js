@@ -6,6 +6,7 @@ import { load } from "../src/config"
 import { Config as SQLiteConfig } from "../src/config/sqlite"
 import path from "path"
 import { stub } from "sinon"
+import { homedir } from "os"
 
 describe("config", () => {
 	it("default configuration", async () => {
@@ -17,7 +18,7 @@ describe("config", () => {
 		assert(config.db.type === "sqlite", "SQLite is the default DB.")
 		assert(config.db.environment instanceof SQLiteConfig)
 		if(config.db.environment instanceof SQLiteConfig) {
-			assert.equal(config.db.environment.path, "~/.homepage/db.sqlite",
+			assert.equal(config.db.environment.path, path.join(homedir(), ".homepage/db.sqlite"),
 				"Save data in db.sqlite")
 		}
 	})
