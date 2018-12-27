@@ -39,13 +39,13 @@ export class Config {
 	}
 }
 
-export const load = async (settings: Object): Promise<Config> => {
+export const load = (base_path: string) => async (settings: Object): Promise<Config> => {
 	const type = fallback(get_string)("sqlite")(settings.type)
 	const environment_settings = fallback(get_object)({ })(settings.environment)
 
 	const environment: Environment = (() => {
 		switch(type) {
-		case "sqlite": return load_sqlite(environment_settings)
+		case "sqlite": return load_sqlite(base_path)(environment_settings)
 		case "postgresql": //TODO
 		default: throw new UnknownDatabaseType(type)
 		}

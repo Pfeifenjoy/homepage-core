@@ -1,9 +1,6 @@
 [include]
 ./src/**/*.js
 
-[ignore]
-.*/build/.*
-
 [libs]
 flow-typed
 

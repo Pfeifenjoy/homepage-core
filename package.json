@@ -1,6 +1,6 @@
 {
   "name": "@arwed/homepage-core",
-  "version": "0.0.3",
+  "version": "0.0.8",
   "description": "My Homepage Core Component",
   "main": "build/index.js",
   "scripts": {
@@ -22,24 +22,24 @@
     "babel-eslint": "^9.0.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
+    "babel-preset-stage-3": "^6.24.1",
     "chai": "^4.1.2",
     "eslint": "^5.6.0",
     "eslint-plugin-flowtype": "^2.30.0",
     "eslint-plugin-mocha": "^5.0.0",
-    "flow": "^0.2.3",
-    "flow-bin": "^0.69.0",
+    "flow-bin": "^0.89.0",
     "flow-copy-source": "^2.0.2",
-    "flow-typed": "^2.4.0",
     "mocha": "^5.1.0",
     "sinon": "^4.5.0",
     "sinon-chai": "^2.14.0"
   },
   "dependencies": {
+    "@arwed/logging": "0.0.0",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-stage-3": "^6.24.1",
     "chalk": "^2.3.2",
     "node-fetch": "^2.2.0",
+    "rimraf-promise": "^2.0.0",
     "sequelize": "^4.38.1",
-    "sqlite3": "^4.0.2"
+    "sqlite3": "^4.0.4"
   }
 }

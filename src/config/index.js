@@ -4,8 +4,10 @@ import { read_file } from "../util"
 import sanitize, {
 	object,
 	array,
+	string,
 	get_object,
 	get_array,
+	get_string,
 	fallback
 } from "../sanitize"
 import { warn } from "../logging"
@@ -17,16 +19,19 @@ import type { Notifier } from "./notifier"
 export class Config {
 	db: Database
 	notifiers: Array<Notifier>
+	base_path: string
 
-	constructor(db: Database, notifiers: Array<Notifier>) {
+	constructor(db: Database, notifiers: Array<Notifier>, base_path: string) {
 		this.db = db
 		this.notifiers = notifiers
+		this.base_path = base_path
 	}
 }
 
 export const description = object({
 	db: { optional: true, ...db_description },
-	notifiers: { optional: true, ...array(notifier_description) }
+	notifiers: { optional: true, ...array(notifier_description) },
+	base_path: string({ optional: true })
 })
 
 export const load = async (default_path: ?string): Promise<Config> => {
@@ -57,10 +62,12 @@ export const load = async (default_path: ?string): Promise<Config> => {
 
 	const raw_data = JSON.parse(/^[ \n\t]*$/.test(raw) ? "{ }" : raw)
 	const data = fallback(get_object)({ })(sanitize(description)(raw_data))
+
+	const base_path = fallback(get_string)("~/.homepage")(data.base_path)
 	const db_settings = fallback(get_object)({ })(data.db)
-	const db = await load_db(db_settings)
+	const db = await load_db(base_path)(db_settings)
 	const notifiers_settings = fallback(get_array)([ ])(data.notifiers)
 	const notifiers = load_notifiers(notifiers_settings)
 
-	return new Config(db, notifiers)
+	return new Config(db, notifiers, base_path)
 }

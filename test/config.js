@@ -27,7 +27,7 @@ describe("config", () => {
 		assert.equal(config.db.type, "sqlite",
 			"sqlite-basic-config.json has SQLite as db type.")
 		if(config.db.environment instanceof SQLiteConfig) {
-			assert.equal(config.db.environment.path, "basic-db.sqlite",
+			assert.equal(config.db.environment.path, "temp/basic-db.sqlite",
 				"sqlite-basic-config.json has basic-db.sqlite as path.")
 		}
 	})
