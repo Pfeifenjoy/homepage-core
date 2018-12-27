@@ -2,11 +2,28 @@
 
 import assert from "assert"
 import { memory_core } from "./helper"
+import Core, { load_config } from "../src"
+import path from "path"
+import { existsSync } from "fs"
 
 describe("core", () => {
 	it("load config", async () => {
 		const core = await memory_core()
 		assert(core.config.db.type === "sqlite")
+		await core.destroy_data()
+	})
+	it("load core with db in folder which does not exist", async () => {
+		const config_path = path.join(__dirname, "assets/sqlite-basic-config.json")
+		const config = await load_config(config_path)
+		const core = new Core(config)
+		const { base_path } = config
+		assert(!existsSync(base_path), "base folder does not exist.")
+		await core.initialize()
+		assert(existsSync(base_path), "base folder does exist.")
+		const db_path = config.db.environment.get_config().storage
+		assert(existsSync(db_path), "database does exist.")
+		await core.destroy_data()
+		assert(!existsSync(base_path), "base folder does not exist.")
 	})
 	it("add message", async () => {
 		const core = await memory_core()
@@ -18,6 +35,7 @@ describe("core", () => {
 		assert.equal(x.get("name"), "Star Lord")
 		assert.equal(x.get("email"), "overlord@googlemail.com")
 		assert.equal(x.get("text"), "Greetings from outer space.")
+		await core.destroy_data()
 	})
 	it("list messages", async () => {
 		const core = await memory_core()
@@ -32,5 +50,6 @@ describe("core", () => {
 		assert.equal(x.get("name"), "Star Lord")
 		assert.equal(x.get("email"), "overlord@googlemail.com")
 		assert.equal(x.get("text"), "Greetings from outer space.")
+		await core.destroy_data()
 	})
 })

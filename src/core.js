@@ -5,6 +5,8 @@ import Sequelize from "sequelize"
 import { Core as MessageSystem } from "./message"
 import { UndefinedModel } from "./exception/model"
 import models from "./models"
+import { existsSync, mkdirSync } from "fs"
+import rmdir from "rimraf-promise"
 
 export const create_core = async (): Promise<Core> => {
 	const config = await load_config()
@@ -24,9 +26,21 @@ export default class Core {
 	}
 
 	async initialize(): Promise<Core> {
+		//create base folder if it does not exist
+		const { base_path } = this.config
+		if(!existsSync(base_path)) {
+			mkdirSync(base_path)
+		}
+
+		//initialize sequelize
 		models(this.sequelize)
 		await this.sequelize.sync()
 		return this
+	}
+
+	async destroy_data() {
+		const { base_path } = this.config
+		await rmdir(base_path)
 	}
 
 	get_model(key: string) {
