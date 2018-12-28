@@ -5,6 +5,7 @@ import { memory_core } from "./helper"
 import Core, { load_config } from "../src"
 import path from "path"
 import { existsSync } from "fs"
+import { SanitizeError, UndefinedAttribute } from "../src/exception/sanitize"
 
 describe("core", () => {
 	it("load config", async () => {
@@ -35,6 +36,21 @@ describe("core", () => {
 		assert.equal(x.get("name"), "Star Lord")
 		assert.equal(x.get("email"), "overlord@googlemail.com")
 		assert.equal(x.get("text"), "Greetings from outer space.")
+		await core.destroy_data()
+	})
+	it("add broken message", async () => {
+		const core = await memory_core()
+		try {
+			await core.message_system.send({
+				text: "Greetings from outer space."
+			})
+		} catch(e) {
+			assert(e instanceof SanitizeError, "Expecting sanitize error")
+			assert.deepEqual(e.key_chain, [ "email" ])
+			assert(e.error instanceof UndefinedAttribute)
+			assert.deepEqual(e.error,
+				{ description: { type: "string" }, property: undefined })
+		}
 		await core.destroy_data()
 	})
 	it("list messages", async () => {

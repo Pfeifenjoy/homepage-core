@@ -1,6 +1,6 @@
 //@flow
 import sanitize, { object, array, number, string, boolean } from "../src/sanitize"
-import { SanitizeError, UnexpectedType } from "../src/exception/sanitize"
+import { SanitizeError, UnexpectedType, UndefinedAttribute } from "../src/exception/sanitize"
 import assert from "assert"
 
 describe("sanitize", () => {
@@ -106,6 +106,21 @@ describe("sanitize", () => {
 				assert.deepEqual(e.key_chain, [ "a" ])
 				assert(e.error instanceof UnexpectedType)
 				assert.deepEqual(e.error, { description: { type: "number" }, property: "1" })
+			}
+		})
+		it("error field missing", () => {
+			const object = {
+				a: 1
+			}
+			try {
+				sanitize(description)(object)
+				assert(false)
+			} catch(e) {
+				assert(e instanceof SanitizeError, "Field missing.")
+				assert.deepEqual(e.key_chain, [ "b" ])
+				assert(e.error instanceof UndefinedAttribute)
+				assert.deepEqual(e.error,
+					{ description: { type: "string" }, property: undefined })
 			}
 		})
 		it("nested", () => {
