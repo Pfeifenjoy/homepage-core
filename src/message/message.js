@@ -1,11 +1,16 @@
 //@flow
-import sanitize, { object, string, get_string } from "../sanitize"
+import sanitize, {
+	object,
+	string,
+	get_string,
+	get_object
+} from "../sanitize"
 
-export const Shape = sanitize(object({
+export const description = object({
 	email: string(),
 	name: string(),
 	text: string()
-}))
+})
 
 export type Message = {|
 	email: string,
@@ -14,9 +19,11 @@ export type Message = {|
 |}
 
 export const get_message = (raw: Object): Message => {
-	const email = get_string(raw.email)
-	const name = get_string(raw.name)
-	const text = get_string(raw.text)
+	const message = get_object(sanitize(description)(raw))
+
+	const email = get_string(message.email)
+	const name = get_string(message.name)
+	const text = get_string(message.text)
 
 	return { email, name, text }
 }
