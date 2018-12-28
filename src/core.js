@@ -6,7 +6,7 @@ import { Core as MessageSystem } from "./message"
 import { UndefinedModel } from "./exception/model"
 import models from "./models"
 import { existsSync, mkdirSync } from "fs"
-import rmdir from "rimraf-promise"
+import rmdir from "rmrf"
 
 export const create_core = async (): Promise<Core> => {
 	const config = await load_config()
