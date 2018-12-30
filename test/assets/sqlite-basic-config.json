@@ -1,5 +1,5 @@
 {
-	"base_path": "temp",
+	"base_path": ".homepage",
 	"db": {
 		"type": "sqlite",
 		"environment": {

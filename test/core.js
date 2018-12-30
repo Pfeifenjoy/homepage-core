@@ -1,17 +1,17 @@
 //@flow
 
 import assert from "assert"
-import { memory_core } from "./helper"
+import { memory_core, destroy_base_folder } from "./helper"
 import Core, { load_config } from "../src"
 import path from "path"
 import { existsSync } from "fs"
 import { SanitizeError, UndefinedAttribute } from "../src/exception/sanitize"
 
 describe("core", () => {
+	afterEach(destroy_base_folder)
 	it("load config", async () => {
 		const core = await memory_core()
 		assert(core.config.db.type === "sqlite")
-		await core.destroy_data()
 	})
 	it("load core with db in folder which does not exist", async () => {
 		const config_path = path.join(__dirname, "assets/sqlite-basic-config.json")
@@ -36,7 +36,6 @@ describe("core", () => {
 		assert.equal(x.get("name"), "Star Lord")
 		assert.equal(x.get("email"), "overlord@googlemail.com")
 		assert.equal(x.get("text"), "Greetings from outer space.")
-		await core.destroy_data()
 	})
 	it("add broken message", async () => {
 		const core = await memory_core()
@@ -51,7 +50,6 @@ describe("core", () => {
 			assert.deepEqual(e.error,
 				{ description: { type: "string" }, property: undefined })
 		}
-		await core.destroy_data()
 	})
 	it("list messages", async () => {
 		const core = await memory_core()
@@ -66,6 +64,5 @@ describe("core", () => {
 		assert.equal(x.get("name"), "Star Lord")
 		assert.equal(x.get("email"), "overlord@googlemail.com")
 		assert.equal(x.get("text"), "Greetings from outer space.")
-		await core.destroy_data()
 	})
 })
