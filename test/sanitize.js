@@ -1,5 +1,13 @@
 //@flow
-import sanitize, { object, array, number, string, boolean } from "../src/sanitize"
+import sanitize, {
+	object,
+	array,
+	number,
+	string,
+	boolean,
+	get_boolean,
+	fallback
+} from "../src/sanitize"
 import { SanitizeError, UnexpectedType, UndefinedAttribute } from "../src/exception/sanitize"
 import assert from "assert"
 
@@ -78,6 +86,11 @@ describe("sanitize", () => {
 				assert(e.description === description)
 				assert(e.property === "true")
 			}
+		})
+		it("fallback", () => {
+			const object = true
+			const result = sanitize(description)(object)
+			assert(fallback(get_boolean)(false)(result) === object)
 		})
 	})
 	describe("object", () => {

@@ -2,6 +2,7 @@
 
 import Sequelize from "sequelize"
 import Message from "./message"
+import User from "./user"
 
 export type model_definition = Sequelize => void
 
@@ -13,4 +14,5 @@ export default (sequelize: Sequelize) => {
 
 	// List all default models here
 	add_model(Message)
+	add_model(User)
 }

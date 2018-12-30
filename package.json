@@ -39,7 +39,7 @@
     "chalk": "^2.3.2",
     "node-fetch": "^2.2.0",
     "rmrf": "^2.0.0",
-    "sequelize": "^4.38.1",
+    "sequelize": "^4.42.0",
     "sqlite3": "^4.0.4"
   }
 }

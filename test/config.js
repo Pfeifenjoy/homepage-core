@@ -28,7 +28,7 @@ describe("config", () => {
 		assert.equal(config.db.type, "sqlite",
 			"sqlite-basic-config.json has SQLite as db type.")
 		if(config.db.environment instanceof SQLiteConfig) {
-			assert.equal(config.db.environment.path, "temp/basic-db.sqlite",
+			assert.equal(config.db.environment.path, ".homepage/basic-db.sqlite",
 				"sqlite-basic-config.json has basic-db.sqlite as path.")
 		}
 	})
@@ -36,8 +36,6 @@ describe("config", () => {
 		const config = await load(path.join(__dirname, "./assets/sqlite-memory-config.json"))
 		const db = config.db.get_instance()
 		await db.authenticate()
-		const result = await db.query("SELECT 1+1 AS result")
-		assert.equal(result[0][0].result, 2, "Simple sql calculation")
 		db.close()
 	})
 })
