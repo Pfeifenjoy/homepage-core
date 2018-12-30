@@ -65,4 +65,13 @@ describe("core", () => {
 		assert.equal(x.get("email"), "overlord@googlemail.com")
 		assert.equal(x.get("text"), "Greetings from outer space.")
 	})
+	it("launch core twice", async () => {
+		const config_path = path.join(__dirname, "assets/sqlite-basic-config.json")
+		const config = await load_config(config_path)
+		const core1 = new Core(config)
+		await core1.initialize()
+
+		const core2 = new Core(config)
+		await core2.initialize()
+	})
 })
