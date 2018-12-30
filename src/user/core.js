@@ -52,7 +52,10 @@ export class Core {
 	async initialize(transaction: ?Transaction) {
 		const { admin } = this.core.config
 		const { default_password, name } = admin
-		await this.create({ password: default_password, name, admin: true }, transaction)
+		const user = await this.find(name, transaction)
+		if(user === null) {
+			await this.create({ password: default_password, name, admin: true }, transaction)
+		}
 	}
 
 	async create(raw: Object, transaction: ?Transaction) {
