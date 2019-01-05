@@ -30,12 +30,13 @@ export default class MessageCore implements Core {
 		return this.get_model().create(message)
 	}
 
-	list_messages(offset: number = 0, limit: number = 50): Promise<Array<*>> {
+	async list_messages(offset: number = 0, limit: number = 50): Promise<Array<*>> {
 		const model = this.get_model()
-		return model.findAll({
+		const results = await model.findAll({
 			offset, limit,
 			order: [ [ "createdAt", "DESC" ] ]
 		})
+		return results.map(({ name, email, text }) => ({ name, email, text }))
 	}
 
 	remove(uuid: string) {
