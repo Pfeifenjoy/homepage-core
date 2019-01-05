@@ -3,7 +3,7 @@
 import assert from "assert"
 import { memory_core, destroy_base_folder } from "./helper"
 import Core, { load_config } from "../src"
-import path from "path"
+import { join } from "path"
 import { existsSync } from "fs"
 import { SanitizeError, UndefinedAttribute } from "../src/exception/sanitize"
 
@@ -14,7 +14,7 @@ describe("core", () => {
 		assert(core.config.db.type === "sqlite")
 	})
 	it("load core with db in folder which does not exist", async () => {
-		const config_path = path.join(__dirname, "assets/sqlite-basic-config.json")
+		const config_path = join(__dirname, "assets/sqlite-basic-config.json")
 		const config = await load_config(config_path)
 		const core = new Core(config)
 		const { base_path } = config
@@ -28,7 +28,7 @@ describe("core", () => {
 	})
 	it("add message", async () => {
 		const core = await memory_core()
-		const x = await core.message_system.add({
+		const x = await core.message.add({
 			email: "overlord@googlemail.com",
 			name: "Star Lord",
 			text: "Greetings from outer space."
@@ -40,7 +40,7 @@ describe("core", () => {
 	it("add broken message", async () => {
 		const core = await memory_core()
 		try {
-			await core.message_system.send({
+			await core.message.send({
 				text: "Greetings from outer space."
 			})
 		} catch(e) {
@@ -53,12 +53,12 @@ describe("core", () => {
 	})
 	it("list messages", async () => {
 		const core = await memory_core()
-		await core.message_system.add({
+		await core.message.add({
 			email: "overlord@googlemail.com",
 			name: "Star Lord",
 			text: "Greetings from outer space."
 		})
-		const messages = await core.message_system.list_messages()
+		const messages = await core.message.list_messages()
 		assert(messages.length === 1)
 		const x = messages[0]
 		assert.equal(x.get("name"), "Star Lord")
@@ -66,7 +66,7 @@ describe("core", () => {
 		assert.equal(x.get("text"), "Greetings from outer space.")
 	})
 	it("launch core twice", async () => {
-		const config_path = path.join(__dirname, "assets/sqlite-basic-config.json")
+		const config_path = join(__dirname, "assets/sqlite-basic-config.json")
 		const config = await load_config(config_path)
 		const core1 = new Core(config)
 		await core1.initialize()

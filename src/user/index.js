@@ -1,3 +1,3 @@
 //@flow
 
-export { Core } from "./core"
+export { default as default } from "./core"

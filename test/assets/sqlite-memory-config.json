@@ -4,5 +4,10 @@
 		"environment": {
 			"path": ":memory:"
 		}
+	},
+	"base_path": ".homepage",
+	"security": {
+		"key_path": "test/assets/ssl-private-key.pem",
+		"cert_path": "test/assets/ssl-certificate.pem"
 	}
 }

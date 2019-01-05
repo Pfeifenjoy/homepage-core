@@ -2,8 +2,9 @@
 import { get_message } from "./message"
 import type { Message } from "./message"
 import MainCore from "../core"
+import type { Core } from ".."
 
-export class Core {
+export default class MessageCore implements Core {
 	core: MainCore
 
 	constructor(core: MainCore) {
@@ -12,6 +13,10 @@ export class Core {
 
 	get_model() {
 		return this.core.get_model("message")
+	}
+
+	async initialize() {
+
 	}
 
 	async send(raw: Object) {
@@ -35,5 +40,9 @@ export class Core {
 
 	remove(uuid: string) {
 		return this.get_model().remove(uuid)
+	}
+
+	async destroy() {
+
 	}
 }

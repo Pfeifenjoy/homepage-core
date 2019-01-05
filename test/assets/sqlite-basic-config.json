@@ -5,5 +5,9 @@
 		"environment": {
 			"path": "basic-db.sqlite"
 		}
+	},
+	"security": {
+		"key_path": "test/assets/ssl-private-key.pem",
+		"cert_path": "test/assets/ssl-certificate.pem"
 	}
 }
