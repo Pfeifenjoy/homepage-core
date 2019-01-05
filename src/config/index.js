@@ -12,10 +12,16 @@ import sanitize, {
 	get_number,
 	fallback
 } from "../sanitize"
-import { warn } from "../logging"
+import { warn } from "@arwed/logging"
 import { Config as Database } from "./database"
 import { load as load_db, description as db_description } from "./database"
 import { load as load_notifiers, description as notifier_description } from "./notifier"
+import {
+	load as load_security,
+	description as security_description,
+	default_config as default_security_config
+} from "./security"
+import type { Config as SecurityConfig } from "./security"
 import type { Notifier } from "./notifier"
 import { homedir } from "os"
 import { join } from "path"
@@ -32,6 +38,7 @@ export class Config {
 	admin: Admin
 	secret: string
 	expiration_duration: number
+	security: SecurityConfig
 
 	constructor(
 		db: Database,
@@ -39,7 +46,8 @@ export class Config {
 		base_path: string = join(homedir(), ".homepage"),
 		admin: Admin = { name: "admin", default_password: "admin" },
 		secret: string = "top secret",
-		expiration_duration: number = default_expiration_duration
+		expiration_duration: number = default_expiration_duration,
+		security: SecurityConfig = default_security_config(join(homedir(), ".homepage"))
 	) {
 		this.db = db
 		this.notifiers = notifiers
@@ -47,6 +55,7 @@ export class Config {
 		this.admin = admin
 		this.secret = secret
 		this.expiration_duration = expiration_duration
+		this.security = security
 	}
 
 	async get_secret() {
@@ -75,7 +84,8 @@ export const description = object({
 		default_password: string({ optional: true })
 	})},
 	secret: string({ optional: true }),
-	expiration_duration: number({ optional: true })
+	expiration_duration: number({ optional: true }),
+	security: { optional: true, ...security_description }
 })
 
 export const load = async (default_path: ?string): Promise<Config> => {
@@ -122,6 +132,11 @@ export const load = async (default_path: ?string): Promise<Config> => {
 	const secret = fallback(get_string)("")(data.secret)
 	const expiration_duration = fallback(get_number)(
 		default_expiration_duration)(data.expiration_duration)
+	const security = load_security(base_path)(data.security)
 
-	return new Config(db, notifiers, base_path, admin, secret, expiration_duration)
+	return new Config(
+		db, notifiers, base_path,
+		admin, secret, expiration_duration,
+		security
+	)
 }

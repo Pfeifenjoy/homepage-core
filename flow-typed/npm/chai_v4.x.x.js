@@ -1,5 +1,5 @@
-// flow-typed signature: c46b11661e19e83f574595250845c8e1
-// flow-typed version: a5452d3be3/chai_v4.x.x/flow_>=v0.25.0
+// flow-typed signature: 0dd4bb1e813d16799c0a1fce94b24b4a
+// flow-typed version: 0ab98275d2/chai_v4.x.x/flow_>=v0.25.0
 
 declare module "chai" {
   declare type ExpectChain<T> = {
@@ -49,7 +49,7 @@ declare module "chai" {
     nested: ExpectChain<T>,
     property: <P>(
       name: string,
-      value?: P, 
+      value?: P,
       message?: string
     ) => ExpectChain<P> & ((name: string) => ExpectChain<mixed>),
 
@@ -86,6 +86,7 @@ declare module "chai" {
     decrease: (obj: mixed, key: string, message?: string) => ExpectChain<T>,
 
     by: (delta: number, message?: string) => ExpectChain<T>,
+    ordered: ExpectChain<T>,
 
     // dirty-chai
     ok: () => ExpectChain<T>,
@@ -112,15 +113,25 @@ declare module "chai" {
     calledThrice: () => ExpectChain<T>,
     calledBefore: (spy: mixed) => ExpectChain<T>,
     calledAfter: (spy: mixed) => ExpectChain<T>,
+    calledImmediatelyBefore: (spy: mixed) => ExpectChain<T>,
+    calledImmediatelyAfter: (spy: mixed) => ExpectChain<T>,
     calledWith: (...args: Array<mixed>) => ExpectChain<T>,
+    calledOnceWith: (...args: Array<mixed>) => ExpectChain<T>,
     calledWithMatch: (...args: Array<mixed>) => ExpectChain<T>,
     calledWithExactly: (...args: Array<mixed>) => ExpectChain<T>,
+    calledOnceWithExactly: (...args: Array<mixed>) => ExpectChain<T>,
+    returned: (returnVal: mixed) => ExpectChain<T>,
+    alwaysReturned: (returnVal: mixed) => ExpectChain<T>,
 
     // chai-as-promised
     eventually: ExpectChain<T>,
     resolvedWith: (value: mixed) => Promise<mixed> & ExpectChain<T>,
     resolved: () => Promise<mixed> & ExpectChain<T>,
-    rejectedWith: (value: mixed) => Promise<mixed> & ExpectChain<T>,
+    rejectedWith: (
+      value: mixed,
+      errMsgMatcher?: RegExp | string,
+      msg?: string
+    ) => Promise<mixed> & ExpectChain<T>,
     rejected: () => Promise<mixed> & ExpectChain<T>,
     notify: (callback: () => mixed) => ExpectChain<T>,
     fulfilled: () => Promise<mixed> & ExpectChain<T>,
@@ -141,7 +152,10 @@ declare module "chai" {
     state: (key: string, val?: any) => ExpectChain<T>,
     value: (val: string) => ExpectChain<T>,
     className: (val: string) => ExpectChain<T>,
-    text: (val: string) => ExpectChain<T>
+    text: (val: string) => ExpectChain<T>,
+
+    // chai-karma-snapshot
+    matchSnapshot: (lang?: any, update?: boolean, msg?: any) => ExpectChain<T>
   };
 
   declare function expect<T>(actual: T, message?: string): ExpectChain<T>;
@@ -159,6 +173,11 @@ declare module "chai" {
 
     static isOk(object: mixed, message?: string): void;
     static isNotOk(object: mixed, message?: string): void;
+
+    static empty(object: mixed, message?: string): void;
+    static isEmpty(object: mixed, message?: string): void;
+    static notEmpty(object: mixed, message?: string): void;
+    static isNotEmpty(object: mixed, message?: string): void;
 
     static equal(actual: mixed, expected: mixed, message?: string): void;
     static notEqual(actual: mixed, expected: mixed, message?: string): void;

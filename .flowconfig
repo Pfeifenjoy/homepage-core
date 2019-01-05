@@ -1,6 +1,3 @@
-[include]
-./src/**/*.js
-
 [libs]
 flow-typed
 

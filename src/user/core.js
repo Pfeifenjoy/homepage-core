@@ -11,6 +11,7 @@ import sanitize, {
 } from "../sanitize"
 import { create, validate } from "./jwt"
 import { Transaction } from "sequelize"
+import type { Core } from ".."
 
 export type Credentials = {
 	name: string,
@@ -38,7 +39,7 @@ const get_user = (raw: Object) => {
 	}
 }
 
-export class Core {
+export default class UserCore implements Core {
 	core: MainCore
 
 	constructor(core: MainCore) {
@@ -92,5 +93,9 @@ export class Core {
 
 	async remove(name: string, transaction: ?Transaction) {
 		return await this.get_model().destroy({ where: { name } }, { transaction })
+	}
+
+	async destroy() {
+
 	}
 }

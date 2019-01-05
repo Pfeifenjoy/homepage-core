@@ -2,34 +2,46 @@
 
 import { Config, load as load_config } from "./config"
 import Sequelize from "sequelize"
-import { Core as MessageSystem } from "./message"
-import { Core as UserSystem } from "./user"
+import MessageSystem from "./message"
+import UserSystem from "./user"
+import SecuritySystem from "./security"
 import { UndefinedModel } from "./exception/model"
 import models from "./models"
 import { existsSync, mkdirSync } from "fs"
 import rmdir from "rmrf"
-import { error } from "@arwed/logging"
+import { info, error } from "@arwed/logging"
 
-export const create_core = async (): Promise<Core> => {
-	const config = await load_config()
-	const core = new Core(config)
-	return core.initialize()
+export const create_core = async (path: ?string): Promise<MainCore> => {
+	const config = await load_config(path)
+	const core = new MainCore(config)
+	await core.initialize()
+	return core
 }
 
-export default class Core {
+export interface Core {
+	core: MainCore;
+	initialize(): Promise<void>;
+	destroy(): Promise<void>;
+}
+
+export default class MainCore {
 	config: Config
 	sequelize: Sequelize
-	message_system: MessageSystem
+	message: MessageSystem
 	user: UserSystem
+	security: SecuritySystem
 
 	constructor(config: Config) {
 		this.config = config
 		this.sequelize = config.db.get_instance()
-		this.message_system = new MessageSystem(this)
+		this.message = new MessageSystem(this)
 		this.user = new UserSystem(this)
+		this.security = new SecuritySystem(this)
 	}
 
-	async initialize(): Promise<Core> {
+	async initialize(): Promise<void> {
+		info("Starting core")
+
 		//create base folder if it does not exist
 		const { base_path } = this.config
 		if(!existsSync(base_path)) {
@@ -45,8 +57,10 @@ export default class Core {
 
 		//initialize sub systems
 		const user_p = this.user.initialize(transaction)
+		const security_p = this.security.initialize()
 
 		await user_p
+		await security_p
 
 		//end transaction
 		try {
@@ -56,13 +70,18 @@ export default class Core {
 			await transaction.rollback()
 			throw e
 		}
-
-		return this
 	}
 
 	async destroy_data() {
 		const { base_path } = this.config
 		await rmdir(base_path)
+	}
+
+	async destroy() {
+		await Promise.all([
+			this.message.destroy(),
+			this.user.destroy()
+		])
 	}
 
 	get_model(key: string) {
