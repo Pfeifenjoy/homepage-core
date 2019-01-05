@@ -61,9 +61,9 @@ describe("core", () => {
 		const messages = await core.message.list_messages()
 		assert(messages.length === 1)
 		const x = messages[0]
-		assert.equal(x.get("name"), "Star Lord")
-		assert.equal(x.get("email"), "overlord@googlemail.com")
-		assert.equal(x.get("text"), "Greetings from outer space.")
+		assert.equal(x.name, "Star Lord")
+		assert.equal(x.email, "overlord@googlemail.com")
+		assert.equal(x.text, "Greetings from outer space.")
 	})
 	it("launch core twice", async () => {
 		const config_path = join(__dirname, "assets/sqlite-basic-config.json")
