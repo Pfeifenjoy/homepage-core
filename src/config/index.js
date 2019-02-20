@@ -92,6 +92,7 @@ export const load = async (default_path: ?string): Promise<Config> => {
 	const search_paths = default_path === undefined || default_path === null ? [
 		"./homepagerc.json",
 		join(homedir(), ".homepagerc.json"),
+		join(homedir(), ".homepage/homepagerc.json"),
 		join(homedir(), ".config/homepage/homepagerc.json"),
 		join(homedir(), ".config/homepage/.homepagerc.json"),
 		"/etc/homepage/homepagerc.json",
