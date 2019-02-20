@@ -1,6 +1,6 @@
 {
   "name": "@arwed/homepage-core",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "My Homepage Core Component",
   "main": "build/index.js",
   "scripts": {
