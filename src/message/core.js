@@ -36,7 +36,8 @@ export default class MessageCore implements Core {
 			offset, limit,
 			order: [ [ "createdAt", "DESC" ] ]
 		})
-		return results.map(({ name, email, text }) => ({ name, email, text }))
+		return results.map(({ uuid, name, email, text, createdAt }) =>
+			({ uuid, name, email, text, createdAt }))
 	}
 
 	remove(uuid: string) {
