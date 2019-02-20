@@ -1,6 +1,5 @@
 //@flow
 
-import "babel-polyfill"
 import assert from "assert"
 import { load } from "../src/config"
 import { Config as SQLiteConfig } from "../src/config/sqlite"
